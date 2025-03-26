@@ -1,13 +1,18 @@
+# Schemas are the data models for the API.
+
 from pydantic import BaseModel, EmailStr, validator
 from datetime import datetime
 from typing import Optional, List
+
 
 class UserBase(BaseModel):
     email: EmailStr
     username: str
 
+
 class UserCreate(UserBase):
     password: str
+
 
 class User(UserBase):
     id: int
@@ -17,12 +22,15 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class TokenData(BaseModel):
     username: Optional[str] = None
+
 
 class ExpenseBase(BaseModel):
     title: str
@@ -31,19 +39,21 @@ class ExpenseBase(BaseModel):
     category: str
     date: Optional[datetime] = None
 
-    @validator('date', pre=True)
+    @validator("date", pre=True)
     def parse_date(cls, value):
         if not value:
             return datetime.now()
         if isinstance(value, datetime):
             return value
         try:
-            return datetime.strptime(value, '%Y-%m-%d')
+            return datetime.strptime(value, "%Y-%m-%d")
         except (TypeError, ValueError):
-            raise ValueError('Invalid date format. Use YYYY-MM-DD')
+            raise ValueError("Invalid date format. Use YYYY-MM-DD")
+
 
 class ExpenseCreate(ExpenseBase):
     pass
+
 
 class Expense(ExpenseBase):
     id: int
@@ -51,4 +61,4 @@ class Expense(ExpenseBase):
     created_at: datetime
 
     class Config:
-        from_attributes = True 
+        from_attributes = True

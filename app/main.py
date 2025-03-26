@@ -1,3 +1,5 @@
+# Main file that runs the FastAPI application.
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -27,6 +29,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(expenses.router, prefix="/api/expenses", tags=["expenses"])
 
+
 @app.get("/")
 async def read_root():
-    return FileResponse("templates/index.html") 
+    return FileResponse("templates/index.html")
